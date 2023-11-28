@@ -26,7 +26,7 @@
 
             $stmt = mysqli_prepare($connexion, $query);
 
-            mysqli_stmt_bind_param($stmt,'sssss',$firstName,$lastName,$email,$password,$imageName,);
+            mysqli_stmt_bind_param($stmt,'sssss',$firstName,$lastName,$email,$password,$imageName);
             $result = mysqli_stmt_execute($stmt);
             if($result){
                 move_uploaded_file($imagetemp,'../pictures/'.$imageName);
@@ -63,10 +63,11 @@
             $result = mysqli_stmt_get_result($stmt);
             if ($row = mysqli_fetch_assoc($result)) {
                 if (password_verify($password, $row['password'])) {
+                    
                     $_SESSION['user_id'] = $row['id'];
                     if(isset($_POST["remember_me"])){
-                        setcookie("email", $_POST["email"], time() + 5*60);
-                        setcookie("password", $_POST["passwod"], time() + 5*60);
+                        setcookie("email", $email, time() + 2*60);
+                        setcookie("password", $password, time() + 3*60);
                     }
                     header('location: home.php');
                 } else {
